@@ -50,7 +50,7 @@ class Solution:
     def isMirror(self, l, r):
         if l and r:
             return l.val == r.val and self.isMirror(l.left, r.right) and self.isMirror(l.right, r.left)
-        return False
+        return l == r
 
 
 # ITERATION #
