@@ -25,30 +25,30 @@ class Solution(object):
         2. //10 pop out the last digit in x
         3. TO BE NOTE: x changed in push and pop, need to store another x to compare with the reversed x
         """
-        xStr = str(x)
-        xRevStr = xStr[-1::-1]
-        if xStr == xRevStr:
-            return True
-        else:
+        
+        if x < 0:
             return False
-        """
+        
+        res = 0
+        num = x
+        while num > 0:
+            res = res * 10 + num % 10
+            num = num // 10
+            
+        if res != x:
+            return False
+        
+        return True
+
             
         # method 2:
         """
         1. num to string
         2. string backward read and compare
         """
-        if x < 0:
-            return False
-        elif x == 0:
+        xStr = str(x)
+        xStrRev = xStr[-1::-1]
+        if xStr == xStrRev:
             return True
-        else:
-            xOrig = x
-            xRev = 0
-            while x != 0:
-                xRev = xRev * 10 + x % 10
-                x = x // 10
-            if xRev == xOrig:
-                return True
-            else:
-                return False
+        return False
+  
