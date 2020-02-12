@@ -38,36 +38,3 @@ class Solution:
                 if strs[j][index] != letter:
                     return shortest[:index]
         return shortest
-
-# my answer ...... T.T 
-class Solution:
-    def longestCommonPrefix(self, strs: List[str]) -> str:
-        if len(strs) == 0:
-            return ""
-        elif len(strs) == 1:
-            return strs[0]
-        # shortest string in the strs list
-        minLength = len(strs[0])
-        word = strs[0]
-        for i in range(1, len(strs)):
-            if len(strs[i]) < minLength:
-                minLength = len(strs[i])
-                word = strs[i]
-                
-        # check all the possibility in a hashtable
-        prefix = {}
-        for i in range(1, len(word)):
-            prefix[word[:i]] = 0
-        
-        # check if all the strings contain any of this possibilities
-        for i in range(len(strs)):
-            for ele in prefix:
-                if ele in strs[i]:
-                    prefix[ele] += 1
-        
-        # go through the prefix table, if any value larger than len(strs)
-        commonPrefix = ""
-        for ele, value in prefix.items():
-            if value >= len(strs) and len(ele) >= len(commonPrefix):
-                commonPrefix = ele
-        return commonPrefix
