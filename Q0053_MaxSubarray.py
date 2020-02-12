@@ -25,11 +25,11 @@ class Solution(object):
         if len(nums) == 0:
             return 0
         else:
-            dp = [nums[0]]
-            maxVal = dp[0]
+            maxEndAtIndex = [nums[0]]
+            maxVal = maxEndAtIndex[0]
             for i in range(1, len(nums)):
-                dp.append(max(dp[i - 1] + nums[i], nums[i]))
+                maxEndAtIndex.append(max(maxEndAtIndex[i - 1] + nums[i], nums[i]))
                 # max of (sum of previous max ending with index i - 1) or (single element ith)
-                maxVal = max(maxVal, dp[i])
+                maxVal = max(maxVal, maxEndAtIndex[i])
                 # update the max value after new dp[i] recorded
             return maxVal
