@@ -11,25 +11,19 @@ Input: [-2,1,-3,4,-1,2,1,-5,4],
 Output: 6
 Explanation: [4,-1,2,1] has the largest sum = 6.
 
-
-NOTE: dp record the max of every subarray ending with index travel 0 - lens(nums)
+Ans: A list to record the max result at current index.
+1. res to record final maxSubArray, intialize as the first element in nums
+2. while iterate index, the max value at current index will be either current value OR sum of list[index - 1] + current value
+3. res keep tracking the max value
 '''
 
-class Solution(object):
-
-    def maxSubArray(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        if len(nums) == 0:
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        if not nums:
             return 0
-        else:
-            maxEndAtIndex = [nums[0]]
-            maxVal = maxEndAtIndex[0]
-            for i in range(1, len(nums)):
-                maxEndAtIndex.append(max(maxEndAtIndex[i - 1] + nums[i], nums[i]))
-                # max of (sum of previous max ending with index i - 1) or (single element ith)
-                maxVal = max(maxVal, maxEndAtIndex[i])
-                # update the max value after new dp[i] recorded
-            return maxVal
+        maxSoFar = [nums[0]]
+        res = nums[0]
+        for i in range(1, len(nums)):
+            maxSoFar.append(max(maxSoFar[i - 1] + nums[i], nums[i]))
+            res = max(res, maxSoFar[i])
+        return res
