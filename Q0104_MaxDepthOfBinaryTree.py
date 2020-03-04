@@ -47,18 +47,11 @@ which is next new level
 
 
 # RECURSION #
-
 class Solution:
-    def isSymmetric(self, root: TreeNode) -> bool:
+    def maxDepth(self, root: TreeNode) -> int:
         if not root:
-            return True
-        return self.isMirror(root.left, root.right)
-
-    def isMirror(self, l, r):
-        if l and r:
-            return l.val == r.val and self.isMirror(l.left, r.right) and self.isMirror(l.right, r.left)
-        return l == r
-
+            return 0
+        return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
 
 # ITERATION #
 
