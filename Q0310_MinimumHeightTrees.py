@@ -1,73 +1,59 @@
 '''
-310. Minimum Height Trees
-For an undirected graph with tree characteristics, we can choose any node as the root. The result graph is then a rooted tree. Among all possible rooted trees, those with minimum height are called minimum height trees (MHTs). Given such a graph, write a function to find all the MHTs and return a list of their root labels.
+160. Intersection of Two Linked Lists
+Write a program to find the node at which the intersection of two singly linked lists begins.
 
-Format
-The graph contains n nodes which are labeled from 0 to n - 1. You will be given the number n and a list of undirected edges (each edge is a pair of labels).
+For example, the following two linked lists:
 
-You can assume that no duplicate edges will appear in edges. Since all edges are undirected, [0, 1] is the same as [1, 0] and thus will not appear together in edges.
-
-Example 1 :
-
-Input: n = 4, edges = [[1, 0], [1, 2], [1, 3]]
-
-        0
-        |
-        1
-       / \
-      2   3 
-
-Output: [1]
+Input: intersectVal = 8, listA = [4,1,8,4,5], listB = [5,0,1,8,4,5], skipA = 2, skipB = 3
+Output: Reference of the node with value = 8
+Input Explanation: The intersected node's value is 8 (note that this must not be 0 if the two lists intersect). 
+From the head of A, it reads as [4,1,8,4,5]. From the head of B, it reads as [5,0,1,8,4,5]. 
+There are 2 nodes before the intersected node in A; There are 3 nodes before the intersected node in B.
 '''
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+# M1: count for the length of two lists, and start one list first till they meet together
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        if not headA or not headB:
+            return None
+        
+        PtA = headA
+        counterA = 1
+        while PtA.next != None:
+            PtA = PtA.next
+            counterA += 1
+        PtB = headB
+        counterB = 1
+        while PtB.next != None:
+            PtB = PtB.next
+            counterB += 1
+        diff = abs(counterA - counterB)  # length difference between A and B
+        
+        PtA = headA
+        PtB = headB
+        for i in range(diff):
+            if counterA >= counterB:
+                PtA = PtA.next
+            else:
+                PtB = PtB.next
+        while PtA != PtB:
+            PtA = PtA.next
+            PtB = PtB.next
+        return PtA
+
+# M2: A + C + B = B + C + A 2nd iteration will meet at the C1
 
 class Solution:
-    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
-        
-        if n == 1:
-            return [0]
-        
-        # build graph
-        G = [set() for _ in range(n)]
-        degree = [0 for _  in range(n)]
-        for v1, v2 in edges:
-            G[v1].add(v2)
-            degree[v1] += 1
-            G[v2].add(v1)
-            degree[v2] += 1
-            
-            
-        # deleting leaves level by level till the middle layer:root or layers:root + node
-        unvisited = set(range(n))
-        leaves = set(v for v in unvisited if degree[v] == 1)
-        while len(unvisited) > 2:
-            newLeaves = set()
-            unvisited -= leaves
-            for v in leaves:
-                for nei in G[v]: #for any connection of v
-                    degree[nei] -= 1
-                    if degree[nei] == 1:
-                        newLeaves.add(nei)
-            leaves = newLeaves
-        return list(leaves)
-
-       
-
-class Solution:
-    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
-        # build graph
-        G = [set() for _ in range(n)]
-        for v1, v2 in edges:
-            G[v1].add(v2)
-            G[v2].add(v1)
-            
-        # deleting leaves level by level till the middle layer:root or layers:root + node
-        unvisited = set(i for i in range(n))
-        while len(unvisited) > 2:
-            leaves = set(i for i in unvisited if len(G[i]) == 1)
-            unvisited -= leaves
-            for v in leaves:
-                for nei in G[v]: #for any connection of v
-                    G[nei].remove(v) # remove v from its connection in graph adjacency list
-        return list(unvisited)
-
-       
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        PtA, PtB = headA, headB
+        while PtA != PtB:
+            PtA = headB if not PtA else PtA.next 
+            PtB = headA if not PtB else PtB.next
+            #PtA = PtA.next if PtA.next else headB
+            #PtB = PtB.next if PtB.next else headA
+        return PtA
