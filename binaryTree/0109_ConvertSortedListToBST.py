@@ -1,30 +1,50 @@
 '''
-'''
-def sortedListToBST(self, head):
-    root = TreeNode()
-    if not head:
-        return 
-    if not head.next:
-        return TreeNode(head.val)
-    # here we get the middle point,
-    # even case, like '1234', slow points to '2',
-    # '3' is root, '12' belongs to left, '4' is right
-    # odd case, like '12345', slow points to '2', '12'
-    # belongs to left, '3' is root, '45' belongs to right
+109. Convert Sorted List to Binary Search Tree
 
-    # dummy start for two pointers
-    # two pointers - bst: root k, left child 2k, right child 2k+1
-    # fast.next is head, is not none
-    slow, fast = head, head.next.next
-    while fast and fast.next:
-        fast = fast.next.next
-        slow = slow.next
-    # tmp points to root
-    tmp = slow.next
-    # cut down the left child
-    slow.next = None
-    root.val = tmp.val
-    root.left = self.sortedListToBST(head)
-    root.right = self.sortedListToBST(tmp.next)
-    return root
-    
+Given a singly linked list where elements are sorted in ascending order, convert it to a height balanced BST.
+
+For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
+
+Example:
+
+Given the sorted linked list: [-10,-3,0,5,9],
+
+One possible answer is: [0,-3,9,-10,null,5], which represents the following height balanced BST:
+
+      0
+     / \
+   -3   9
+   /   /
+ -10  5
+
+'''
+
+
+class Solution:
+    def sortedListToBST(self, head: ListNode) -> TreeNode:
+
+        if not head:
+            return None
+
+        if not head.next:
+            return TreeNode(head.val)
+
+        # build array list
+        curr, lst = head, []
+        while curr:
+            lst.append(curr.val)
+            curr = curr.next
+
+        return self.buildBST(lst, 0, len(lst))
+
+    def buildBST(self, nums, s, e):
+        if not nums:
+            return None
+        if s >= e:
+            return None
+        mid = s + (e - s) // 2
+        root = TreeNode(nums[mid])
+        root.left = self.buildBST(nums, s, mid)
+        root.right = self.buildBST(nums, mid + 1, e)
+
+        return root
